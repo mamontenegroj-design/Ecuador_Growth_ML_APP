@@ -12,28 +12,28 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from pathlib import Path
 
 # ==========================================================
-# 1. CONFIGURACI脫N GENERAL
+# 1. CONFIGURACIÓN GENERAL
 # ==========================================================
 
 st.set_page_config(
-    page_title="Ecuador Growth ML 路 MLOps",
-    page_icon="馃搱",
+    page_title="Ecuador Growth ML · MLOps",
+    page_icon="📈",
     layout="wide"
 )
 
 ROOT = Path(__file__).resolve().parent
 
-# Las variables se recuperan del modelo entrenado y su configuraci贸n.
-# No se definen manualmente en la aplicaci贸n.
+# Las variables se recuperan del modelo entrenado y su configuración.
+# No se definen manualmente en la aplicación.
 
-st.title("馃搱 Ecuador Growth ML")
+st.title("📈 Ecuador Growth ML")
 st.caption(
-    "Predicci贸n econ贸mica 路 Machine Learning 路 MLOps"
+    "Predicción económica · Machine Learning · MLOps"
 )
 
 st.info(
-    "Proyecto acad茅mico con datos simulados. "
-    "Las estimaciones no son pron贸sticos oficiales."
+    "Proyecto académico con datos simulados. "
+    "Las estimaciones no son pronósticos oficiales."
 )
 
 
@@ -77,7 +77,7 @@ def preparar_variables(datos):
         X[variable] = pd.to_numeric(X[variable], errors="coerce")
 
     if X.isna().all(axis=1).any():
-        raise ValueError("Hay filas sin ning煤n predictor num茅rico v谩lido.")
+        raise ValueError("Hay filas sin ningún predictor numérico válido.")
     # Las imputaciones parciales, si las hay, se gestionan en el pipeline entrenado.
     if X.isna().any().any() and not hasattr(modelo, "named_steps"):
         raise ValueError("Hay valores faltantes. Revise su CSV o el preprocesamiento del modelo.")
@@ -106,9 +106,9 @@ ruta_modelo = localizar_archivo(
 
 if ruta_modelo is None:
     st.error(
-        "No se encontr贸 modelo_pib.joblib. "
-        "Col贸calo en la carpeta modelos/ "
-        "o en la ra铆z del repositorio."
+        "No se encontró modelo_pib.joblib. "
+        "Colócalo en la carpeta modelos/ "
+        "o en la raíz del repositorio."
     )
     st.stop()
 
@@ -120,7 +120,7 @@ except Exception as e:
 
 
 # ==========================================================
-# 4. CARGAR EXPERIMENTOS Y M脡TRICAS
+# 4. CARGAR EXPERIMENTOS Y MÉTRICAS
 # ==========================================================
 
 CARPETAS_TRACKER = [
@@ -163,7 +163,7 @@ mejor_experimento = (
 
 
 # ==========================================================
-# 4B. CONFIGURACI脫N DIN脕MICA DE VARIABLES
+# 4B. CONFIGURACIÓN DINÁMICA DE VARIABLES
 # ==========================================================
 
 ruta_config = localizar_archivo(
@@ -173,7 +173,7 @@ config = cargar_json(str(ruta_config)) if ruta_config else {}
 nombres_entrenados = nombres_modelo_entrenado(modelo)
 
 # Compatibilidad con el notebook anterior: mejor_experimento.json
-# tambi茅n contiene las variables elegidas en entrenamiento.
+# también contiene las variables elegidas en entrenamiento.
 features_config = config.get("features")
 if features_config is None and mejor_experimento is not None:
     features_config = mejor_experimento.get("features")
@@ -192,21 +192,21 @@ if not isinstance(features_config, list) or not features_config or not all(
 FEATURES = list(features_config)
 TARGET = config.get("target", "crecimiento_pib")
 if len(set(FEATURES)) != len(FEATURES):
-    st.error("La configuraci贸n contiene variables duplicadas.")
+    st.error("La configuración contiene variables duplicadas.")
     st.stop()
 
 if nombres_entrenados is not None and nombres_entrenados != FEATURES:
     st.error(
         "Las variables de config_modelo.json no coinciden con las "
         "variables y el orden del modelo_pib.joblib. "
-        "Vuelva a exportar ambos archivos desde la misma ejecuci贸n de Colab."
+        "Vuelva a exportar ambos archivos desde la misma ejecución de Colab."
     )
     st.stop()
 
 if nombres_entrenados is None:
     st.warning(
         "No fue posible contrastar los nombres de entrada guardados en el modelo. "
-        "Verifique que la configuraci贸n y el .joblib sean de la misma ejecuci贸n."
+        "Verifique que la configuración y el .joblib sean de la misma ejecución."
     )
 
 with st.expander(f"Variables del modelo activo ({len(FEATURES)})"):
@@ -214,7 +214,7 @@ with st.expander(f"Variables del modelo activo ({len(FEATURES)})"):
 
 
 # ==========================================================
-# 5. ESTADO DE LA SESI脫N
+# 5. ESTADO DE LA SESIÓN
 # ==========================================================
 
 if "historial" not in st.session_state:
@@ -228,29 +228,29 @@ if "registro_manual" not in st.session_state:
 
 
 # ==========================================================
-# 6. MEN脷 PRINCIPAL
+# 6. MENÚ PRINCIPAL
 # ==========================================================
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "馃М Predicci贸n manual",
-    "馃搨 Cargar CSV",
-    "馃И Experiment Tracker",
-    "馃搳 Monitoreo",
-    "馃攧 Reentrenamiento"
+    "🧮 Predicción manual",
+    "📂 Cargar CSV",
+    "🧪 Experiment Tracker",
+    "📊 Monitoreo",
+    "🔄 Reentrenamiento"
 ])
 
 
 # ==========================================================
-# 7. PREDICCI脫N MANUAL
+# 7. PREDICCIÓN MANUAL
 # ==========================================================
 
 with tab1:
 
-    st.header("Predicci贸n manual del PIB")
+    st.header("Predicción manual del PIB")
 
     st.write(
         "Ingrese los valores de los indicadores "
-        "econ贸micos utilizados por el modelo."
+        "económicos utilizados por el modelo."
     )
 
     with st.form("formulario_manual"):
@@ -265,11 +265,11 @@ with tab1:
                     key=f"predictor_{variable}"
                 )
 
-        trimestre = st.text_input("Trimestre de estimaci贸n", value="2026Q4")
+        trimestre = st.text_input("Trimestre de estimación", value="2026Q4")
         escenario = st.selectbox(
             "Escenario", ["Base", "Optimista", "Pesimista", "Personalizado"]
         )
-        calcular = st.form_submit_button("Generar predicci贸n", type="primary")
+        calcular = st.form_submit_button("Generar predicción", type="primary")
 
     if calcular:
         datos_manual = pd.DataFrame([valores], columns=FEATURES)
@@ -295,7 +295,7 @@ with tab1:
         )
 
         if st.button(
-            "Registrar predicci贸n manual",
+            "Registrar predicción manual",
             key="registrar_manual"
         ):
 
@@ -303,7 +303,7 @@ with tab1:
                 st.session_state.registro_manual.copy()
             )
 
-            st.success("Predicci贸n registrada.")
+            st.success("Predicción registrada.")
 
 
 # ==========================================================
@@ -312,7 +312,7 @@ with tab1:
 
 with tab2:
 
-    st.header("Predicci贸n mediante archivo CSV")
+    st.header("Predicción mediante archivo CSV")
 
     st.write(
         "Cargue un archivo CSV que contenga "
@@ -340,7 +340,7 @@ with tab2:
 
             nuevos_datos = pd.read_csv(archivo)
 
-            st.subheader("Informaci贸n recibida")
+            st.subheader("Información recibida")
 
             st.dataframe(
                 nuevos_datos,
@@ -441,7 +441,7 @@ with tab2:
     else:
 
         st.info(
-            "Todav铆a no existen predicciones registradas."
+            "Todavía no existen predicciones registradas."
         )
 
 
@@ -454,14 +454,14 @@ with tab3:
     st.header("ML Experiment Tracker")
 
     st.caption(
-        "Seguimiento y comparaci贸n de experimentos "
+        "Seguimiento y comparación de experimentos "
         "de Machine Learning."
     )
 
     if experimentos is None:
 
         st.warning(
-            "No se encontr贸 experimentos.csv. "
+            "No se encontró experimentos.csv. "
             "Sube el archivo generado en Colab "
             "a la carpeta salidas_tracker/."
         )
@@ -519,7 +519,7 @@ with tab3:
             if exp.empty:
 
                 st.warning(
-                    "No existen experimentos v谩lidos."
+                    "No existen experimentos válidos."
                 )
 
             else:
@@ -555,11 +555,11 @@ with tab3:
                 st.divider()
 
                 # ------------------------------------------
-                # GRILLA DE HIPERPAR脕METROS
+                # GRILLA DE HIPERPARÁMETROS
                 # ------------------------------------------
 
                 st.subheader(
-                    "Grilla de hiperpar谩metros"
+                    "Grilla de hiperparámetros"
                 )
 
                 mostrar = [
@@ -590,11 +590,11 @@ with tab3:
                 st.divider()
 
                 # ------------------------------------------
-                # SELECCI脫N DE EJECUCIONES
+                # SELECCIÓN DE EJECUCIONES
                 # ------------------------------------------
 
                 st.subheader(
-                    "Comparaci贸n de modelos"
+                    "Comparación de modelos"
                 )
 
                 opciones = exp["run_id"].astype(
@@ -616,7 +616,7 @@ with tab3:
                 if not comparacion.empty:
 
                     metrica = st.radio(
-                        "M茅trica de comparaci贸n",
+                        "Métrica de comparación",
                         ["rmse_cv", "mae_cv"],
                         horizontal=True,
                         format_func=lambda x: {
@@ -633,11 +633,11 @@ with tab3:
 
                     st.caption(
                         "Menor error indica mejor "
-                        "desempe帽o predictivo."
+                        "desempeño predictivo."
                     )
 
                     st.subheader(
-                        "Hiperpar谩metros comparados"
+                        "Hiperparámetros comparados"
                     )
 
                     st.dataframe(
@@ -649,10 +649,10 @@ with tab3:
                 st.divider()
 
                 # ------------------------------------------
-                # DETALLE DE UNA EJECUCI脫N
+                # DETALLE DE UNA EJECUCIÓN
                 # ------------------------------------------
 
-                st.subheader("Detalle de ejecuci贸n")
+                st.subheader("Detalle de ejecución")
 
                 run_seleccionado = st.selectbox(
                     "Seleccione un Run ID",
@@ -667,29 +667,29 @@ with tab3:
                 c1, c2, c3 = st.columns(3)
 
                 c1.metric(
-                    "N煤mero de 谩rboles",
+                    "Número de árboles",
                     int(detalle["n_estimators"])
                 )
 
                 c2.metric(
-                    "Profundidad m谩xima",
+                    "Profundidad máxima",
                     int(detalle["max_depth"])
                 )
 
                 c3.metric(
-                    "M铆nimo por hoja",
+                    "Mínimo por hoja",
                     int(detalle["min_samples_leaf"])
                 )
 
                 c4, c5 = st.columns(2)
 
                 c4.metric(
-                    "MAE validaci贸n cruzada",
+                    "MAE validación cruzada",
                     f"{detalle['mae_cv']:.4f}"
                 )
 
                 c5.metric(
-                    "RMSE validaci贸n cruzada",
+                    "RMSE validación cruzada",
                     f"{detalle['rmse_cv']:.4f}"
                 )
 
@@ -700,7 +700,7 @@ with tab3:
                 st.divider()
 
                 st.subheader(
-                    "Validaci贸n cruzada temporal"
+                    "Validación cruzada temporal"
                 )
 
                 if folds is not None and "run_id" in folds.columns:
@@ -734,13 +734,13 @@ with tab3:
 
                         st.info(
                             "No hay folds registrados "
-                            "para esta ejecuci贸n."
+                            "para esta ejecución."
                         )
 
                 else:
 
                     st.info(
-                        "No se encontr贸 "
+                        "No se encontró "
                         "experimentos_folds.csv."
                     )
 
@@ -770,7 +770,7 @@ with tab3:
                 else:
 
                     st.info(
-                        "No se encontr贸 "
+                        "No se encontró "
                         "mejor_experimento.json."
                     )
 
@@ -784,7 +784,7 @@ with tab4:
     st.header("Monitoreo del modelo")
 
     st.write(
-        "Evaluaci贸n del comportamiento predictivo "
+        "Evaluación del comportamiento predictivo "
         "a partir de observaciones conocidas."
     )
 
@@ -906,7 +906,7 @@ with tab4:
                 st.line_chart(grafico)
 
                 st.subheader(
-                    "Errores de predicci贸n"
+                    "Errores de predicción"
                 )
 
                 errores = evaluacion[
@@ -925,33 +925,33 @@ with tab4:
             else:
 
                 st.warning(
-                    "No existen observaciones v谩lidas "
-                    "para calcular las m茅tricas."
+                    "No existen observaciones válidas "
+                    "para calcular las métricas."
                 )
 
         else:
 
             st.warning(
-                "No se identificaron autom谩ticamente "
+                "No se identificaron automáticamente "
                 "las columnas observada y predicha."
             )
 
     else:
 
         st.info(
-            "Para visualizar m茅tricas de prueba, "
+            "Para visualizar métricas de prueba, "
             "incorpore predicciones_test_ganador.csv "
             "a salidas_tracker/."
         )
 
     # ------------------------------------------------------
-    # HISTORIAL DE ESTIMACIONES DE LA SESI脫N
+    # HISTORIAL DE ESTIMACIONES DE LA SESIÓN
     # ------------------------------------------------------
 
     st.divider()
 
     st.subheader(
-        "Predicciones registradas durante la sesi贸n"
+        "Predicciones registradas durante la sesión"
     )
 
     if st.session_state.historial:
@@ -975,43 +975,43 @@ with tab4:
     else:
 
         st.info(
-            "A煤n no se han registrado estimaciones "
-            "durante esta sesi贸n."
+            "Aún no se han registrado estimaciones "
+            "durante esta sesión."
         )
 
     st.caption(
-        "El historial de sesi贸n no representa "
+        "El historial de sesión no representa "
         "observaciones reales ni permite calcular "
         "errores hasta disponer del PIB observado."
     )
 
 
 # ==========================================================
-# 11. PIE DE P脕GINA
+# 11. PIE DE PÁGINA
 # ==========================================================
 
 st.divider()
 
 st.caption(
-    "Ecuador Growth ML 路 Proyecto acad茅mico de MLOps "
+    "Ecuador Growth ML · Proyecto académico de MLOps "
     "| Google Colab + GitHub + Streamlit"
 )
 
 
 # ==========================================================
-# 12. REENTRENAMIENTO BAJO DEMANDA (DEMOSTRACI脫N MLOps)
+# 12. REENTRENAMIENTO BAJO DEMANDA (DEMOSTRACIÓN MLOps)
 # ==========================================================
 
 with tab5:
     st.header("Reentrenamiento supervisado del modelo")
     st.write(
-        "Cargue la base hist贸rica original y observaciones posteriores con el "
-        "PIB ya observado. El sistema entrenar谩 un candidato, comparar谩 su error "
-        "con el modelo publicado en los mismos trimestres y permitir谩 descargar "
-        "el modelo actualizado. No reemplaza autom谩ticamente el publicado."
+        "Cargue la base histórica original y observaciones posteriores con el "
+        "PIB ya observado. El sistema entrenará un candidato, comparará su error "
+        "con el modelo publicado en los mismos trimestres y permitirá descargar "
+        "el modelo actualizado. No reemplaza automáticamente el publicado."
     )
     st.info(
-        "Esta demostraci贸n se activa al pulsar un bot贸n. No es reentrenamiento "
+        "Esta demostración se activa al pulsar un botón. No es reentrenamiento "
         "programado y no guarda modelos permanentemente en Streamlit Cloud."
     )
     with st.expander("Formato requerido de ambos archivos CSV"):
@@ -1019,13 +1019,13 @@ with tab5:
         st.write(f"Variable observada: `{TARGET}`.")
         st.write("Predictores del modelo activo:", FEATURES)
         st.caption(
-            "La base hist贸rica debe ser la misma utilizada para entrenar el "
+            "La base histórica debe ser la misma utilizada para entrenar el "
             "modelo_pib.joblib publicado. Las nuevas observaciones deben ser "
             "posteriores y no haber sido utilizadas para entrenarlo."
         )
 
     archivo_historico = st.file_uploader(
-        "1. Base hist贸rica original (con PIB observado)",
+        "1. Base histórica original (con PIB observado)",
         type="csv", key="historico_reentrenamiento"
     )
     archivo_nuevo = st.file_uploader(
@@ -1033,8 +1033,8 @@ with tab5:
         type="csv", key="nuevos_reentrenamiento"
     )
     confirma_origen = st.checkbox(
-        "Confirmo que la base hist贸rica corresponde al entrenamiento del "
-        "modelo publicado y que los datos nuevos no fueron utilizados en 茅l.",
+        "Confirmo que la base histórica corresponde al entrenamiento del "
+        "modelo publicado y que los datos nuevos no fueron utilizados en él.",
         key="confirmacion_reentrenamiento"
     )
 
@@ -1061,7 +1061,7 @@ with tab5:
         if d[TARGET].isna().any():
             raise ValueError(f"{etiqueta}: existen valores de PIB no observados")
         if d[FEATURES].isna().all(axis=1).any():
-            raise ValueError(f"{etiqueta}: existen filas sin ning煤n predictor v谩lido")
+            raise ValueError(f"{etiqueta}: existen filas sin ningún predictor válido")
         return d.sort_values("trimestre").reset_index(drop=True)
 
     if st.button(
@@ -1075,9 +1075,9 @@ with tab5:
         else:
             try:
                 if not hasattr(modelo, "fit") or not hasattr(modelo, "predict"):
-                    raise ValueError("El archivo joblib no contiene un estimador v谩lido")
+                    raise ValueError("El archivo joblib no contiene un estimador válido")
                 historico_re = ordenar_y_validar(
-                    pd.read_csv(archivo_historico), "Hist贸rico"
+                    pd.read_csv(archivo_historico), "Histórico"
                 )
                 nuevos_re = ordenar_y_validar(
                     pd.read_csv(archivo_nuevo), "Nuevos datos"
@@ -1085,7 +1085,7 @@ with tab5:
                 if historico_re["trimestre"].max() >= nuevos_re["trimestre"].min():
                     raise ValueError(
                         "Los nuevos trimestres deben ser posteriores a toda la "
-                        "base hist贸rica, sin solapamientos."
+                        "base histórica, sin solapamientos."
                     )
                 if len(nuevos_re) < 4:
                     raise ValueError(
@@ -1133,9 +1133,9 @@ with tab5:
                     "mae_candidato": mae_candidato,
                     "supera_rmse_actual": aprobado,
                     "criterio": "RMSE del candidato menor, medido sobre el mismo holdout posterior",
-                    "advertencia": "Comparaci贸n did谩ctica; con pocos trimestres la evidencia es limitada"
+                    "advertencia": "Comparación didáctica; con pocos trimestres la evidencia es limitada"
                 }
-                # Solo tras la comparaci贸n, ajustar un modelo descargable con
+                # Solo tras la comparación, ajustar un modelo descargable con
                 # toda la historia disponible, incluyendo el holdout ya evaluado.
                 final = clone(modelo)
                 base_final = pd.concat([historico_re, nuevos_re], ignore_index=True)
@@ -1153,11 +1153,11 @@ with tab5:
     resultado = st.session_state.get("resultado_reentrenamiento")
     if resultado:
         r = resultado["reporte"]
-        st.subheader("Comparaci贸n fuera de muestra")
+        st.subheader("Comparación fuera de muestra")
         a, b, c = st.columns(3)
         a.metric("RMSE actual", f"{r['rmse_actual']:.4f}")
         b.metric("RMSE candidato", f"{r['rmse_candidato']:.4f}")
-        c.metric("Trimestres de evaluaci贸n", r["n_holdout"])
+        c.metric("Trimestres de evaluación", r["n_holdout"])
         if r["supera_rmse_actual"]:
             st.success("El candidato mejora el RMSE en esta prueba temporal.")
         else:
@@ -1169,7 +1169,7 @@ with tab5:
             ]
         )
         st.caption(
-            "La comparaci贸n se realiza antes de reentrenar el modelo descargable "
+            "La comparación se realiza antes de reentrenar el modelo descargable "
             "con todas las observaciones. Un resultado favorable con pocos "
             "trimestres no demuestra una mejora generalizable."
         )
@@ -1180,7 +1180,7 @@ with tab5:
             mime="application/json"
         )
         st.download_button(
-            "Descargar comparaci贸n temporal (CSV)",
+            "Descargar comparación temporal (CSV)",
             data=resultado["tabla"].to_csv(index=False),
             file_name="comparacion_reentrenamiento.csv",
             mime="text/csv"
@@ -1193,6 +1193,6 @@ with tab5:
         )
         st.warning(
             "Descargar no sustituye el modelo activo. Para desplegar una nueva "
-            "versi贸n, revise las m茅tricas y actualice los artefactos en GitHub. "
+            "versión, revise las métricas y actualice los artefactos en GitHub. "
             "No cargue archivos joblib de procedencia desconocida."
         )
