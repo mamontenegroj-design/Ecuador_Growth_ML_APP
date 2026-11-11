@@ -1,0 +1,9 @@
+run_id,fecha_utc,modelo,n_estimators,max_depth,min_samples_leaf,max_features,random_state,n_splits,test_size,periodo_entrenamiento_fin,n_variables,variables,mae_cv,rmse_cv,std_rmse_cv,ranking,es_mejor
+RUN-002,2026-11-11T00:17:22+00:00,Random Forest,100,4,4,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3155554184078324,1.5528666405127116,0.2502899316117482,1,True
+RUN-004,2026-11-11T00:17:22+00:00,Random Forest,100,7,4,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.318847938308759,1.5603404571242756,0.2605575514096566,2,False
+RUN-003,2026-11-11T00:17:22+00:00,Random Forest,100,7,2,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3367434632450883,1.5647694397118308,0.26015893502337023,3,False
+RUN-001,2026-11-11T00:17:22+00:00,Random Forest,100,4,2,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3301407950560002,1.56491483721154,0.24457269620602778,4,False
+RUN-006,2026-11-11T00:17:22+00:00,Random Forest,200,4,4,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3226710138006097,1.5693470574767772,0.26141712917031207,5,False
+RUN-005,2026-11-11T00:17:22+00:00,Random Forest,200,4,2,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.33205985238915,1.574742463973619,0.23737538143021203,6,False
+RUN-008,2026-11-11T00:17:22+00:00,Random Forest,200,7,4,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3251127191728462,1.5755831307771757,0.2665410353668464,7,False
+RUN-007,2026-11-11T00:17:22+00:00,Random Forest,200,7,2,1.0,2026,4,4,2024Q4,4,"importaciones, depositos, ventas_minoristas, produccion_industrial",1.3402547426046176,1.5797349230971935,0.254448896421421,8,False

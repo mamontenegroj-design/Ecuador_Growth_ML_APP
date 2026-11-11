@@ -1,0 +1,27 @@
+{
+  "run_id": "RUN-002",
+  "parametros": {
+    "n_estimators": 100,
+    "max_depth": 4,
+    "min_samples_leaf": 4
+  },
+  "metricas_cv": {
+    "mae": 1.3155554184078324,
+    "rmse": 1.5528666405127116
+  },
+  "metricas_test": {
+    "run_id": "RUN-002",
+    "mae_test": 0.99195344866433,
+    "rmse_test": 1.147762488302861,
+    "r2_test": 0.1814030002027569,
+    "n_test": 7,
+    "inicio_test": "2025Q1",
+    "fin_test": "2026Q3"
+  },
+  "features": [
+    "importaciones",
+    "depositos",
+    "ventas_minoristas",
+    "produccion_industrial"
+  ]
+}

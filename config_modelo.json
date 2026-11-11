@@ -1,0 +1,14 @@
+{
+  "modelo": "Random Forest",
+  "target": "crecimiento_pib",
+  "features": [
+    "importaciones",
+    "depositos",
+    "ventas_minoristas",
+    "produccion_industrial"
+  ],
+  "run_id": "RUN-002",
+  "periodicidad": "trimestral",
+  "datos": "simulados",
+  "version_config": 1
+}
